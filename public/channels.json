@@ -1,0 +1,214 @@
+{
+  "version": "1.0",
+  "updated": "2026-06-16",
+  "categories": [
+    { "id": "bangladesh", "name": "বাংলাদেশ", "icon": "🇧🇩" },
+    { "id": "india", "name": "ভারত", "icon": "🇮🇳" },
+    { "id": "sports", "name": "স্পোর্টস", "icon": "⚽" },
+    { "id": "movies", "name": "মুভিজ", "icon": "🎬" },
+    { "id": "news", "name": "নিউজ", "icon": "📰" },
+    { "id": "kids", "name": "কিডস", "icon": "🧒" },
+    { "id": "religious", "name": "ধর্মীয়", "icon": "🕌" },
+    { "id": "international", "name": "আন্তর্জাতিক", "icon": "🌍" }
+  ],
+  "channels": [
+    {
+      "id": "btv",
+      "name": "BTV National",
+      "category": "bangladesh",
+      "logo": "https://ssl.com.bd/sites/default/files/BTV%20Logo%20Gallery.png",
+      "description": "বাংলাদেশ সরকারি টেলিভিশন",
+      "streams": [{ "type": "hls", "url": "https://owrcovcrpy.gpcdn.net/bpk-tv/1709/output/index.m3u8", "quality": "720p", "label": "Primary" }]
+    },
+    {
+      "id": "somoy-tv",
+      "name": "Somoy TV",
+      "category": "bangladesh",
+      "logo": "https://dl.dropbox.com/s/leielj83em5kg7h/somoy_news.png",
+      "description": "সময় টিভি",
+      "streams": [{ "type": "hls", "url": "https://owrcovcrpy.gpcdn.net/bpk-tv/1702/output/1702.m3u8", "quality": "720p", "label": "Primary" }]
+    },
+    {
+      "id": "jamuna-tv",
+      "name": "Jamuna TV",
+      "category": "bangladesh",
+      "logo": "https://dl.dropbox.com/s/k7z1dsec1jfjbkn/jamuna_tv_bd.png",
+      "description": "যমুনা টেলিভিশন",
+      "streams": [{ "type": "hls", "url": "https://owrcovcrpy.gpcdn.net/bpk-tv/1701/output/index.m3u8", "quality": "720p", "label": "Primary" }]
+    },
+    {
+      "id": "ntv",
+      "name": "NTV",
+      "category": "bangladesh",
+      "logo": "https://raw.githubusercontent.com/subirkumarpaul/Logo/main/NTV.png",
+      "description": "নাগরিক টেলিভিশন",
+      "streams": [{ "type": "hls", "url": "https://owrcovcrpy.gpcdn.net/bpk-tv/1716/output/1716.m3u8", "quality": "720p", "label": "Primary" }]
+    },
+    {
+      "id": "rtv",
+      "name": "RTV",
+      "category": "bangladesh",
+      "logo": "https://raw.githubusercontent.com/subirkumarpaul/Logo/main/RTV.png",
+      "description": "আরটিভি",
+      "streams": [{ "type": "hls", "url": "https://tvsen6.aynaott.com/rtv/tracks-v1a1/mono.ts.m3u8", "quality": "720p", "label": "Primary" }]
+    },
+    {
+      "id": "channel-i",
+      "name": "Channel I",
+      "category": "bangladesh",
+      "logo": "https://cdn.tvpassport.com/image/station/240x135/channel-i-bangla.png",
+      "description": "চ্যানেল আই",
+      "streams": [{ "type": "hls", "url": "https://owrcovcrpy.gpcdn.net/bpk-tv/1723/output/index.m3u8", "quality": "720p", "label": "Primary" }]
+    },
+    {
+      "id": "independent-tv",
+      "name": "Independent TV",
+      "category": "bangladesh",
+      "logo": "https://dl.dropbox.com/s/7xwwb8hetz3w8rp/independent_tv.png",
+      "description": "ইন্ডিপেন্ডেন্ট টিভি",
+      "streams": [{ "type": "hls", "url": "https://owrcovcrpy.gpcdn.net/bpk-tv/1704/output/1704.m3u8", "quality": "720p", "label": "Primary" }]
+    },
+    {
+      "id": "ekattor-tv",
+      "name": "Ekattor TV",
+      "category": "bangladesh",
+      "logo": "https://raw.githubusercontent.com/subirkumarpaul/Logo/main/Ekattor%20TV.png",
+      "description": "একাত্তর টিভি",
+      "streams": [{ "type": "hls", "url": "https://owrcovcrpy.gpcdn.net/bpk-tv/1705/output/1705.m3u8", "quality": "720p", "label": "Primary" }]
+    },
+    {
+      "id": "channel-24",
+      "name": "Channel 24",
+      "category": "bangladesh",
+      "logo": "https://raw.githubusercontent.com/subirkumarpaul/Logo/main/channel%2024.png",
+      "description": "চ্যানেল ২৪",
+      "streams": [{ "type": "hls", "url": "https://owrcovcrpy.gpcdn.net/bpk-tv/1703/output/1703.m3u8", "quality": "720p", "label": "Primary" }]
+    },
+    {
+      "id": "atn-news",
+      "name": "ATN News",
+      "category": "bangladesh",
+      "logo": "https://raw.githubusercontent.com/subirkumarpaul/Logo/main/ATN%20News.png",
+      "description": "এটিএন নিউজ",
+      "streams": [{ "type": "hls", "url": "https://owrcovcrpy.gpcdn.net/bpk-tv/1706/output/1706.m3u8", "quality": "720p", "label": "Primary" }]
+    },
+    {
+      "id": "deepto-tv",
+      "name": "Deepto TV",
+      "category": "bangladesh",
+      "logo": "https://raw.githubusercontent.com/subirkumarpaul/Logo/main/Deepto%20TV.jpeg",
+      "description": "দীপ্ত টিভি",
+      "streams": [{ "type": "hls", "url": "https://byphdgllyk.gpcdn.net/hls/deeptotv/index.m3u8", "quality": "720p", "label": "Primary" }]
+    },
+    {
+      "id": "t-sports",
+      "name": "T Sports",
+      "category": "sports",
+      "logo": "https://raw.githubusercontent.com/subirkumarpaul/Logo/main/T%20Sports.png",
+      "description": "টি স্পোর্টস",
+      "streams": [
+        { "type": "hls", "url": "https://live.tsports.com/mobile_hls/tsports_live_1/playlist.m3u8", "quality": "HD", "label": "Primary" },
+        { "type": "hls", "url": "https://tvsen7.aynaott.com/tsports-hd/tracks-v1a1/mono.ts.m3u8", "quality": "HD", "label": "Backup" }
+      ]
+    },
+    {
+      "id": "star-jalsha",
+      "name": "Star Jalsha",
+      "category": "india",
+      "logo": "https://i.postimg.cc/1tmcNHW3/Star-Jalsha-HD.jpg",
+      "description": "স্টার জলসা",
+      "streams": [{ "type": "hls", "url": "http://198.195.239.50:8095/bdixbd.net_StarJalshaHD/video.m3u8", "quality": "HD", "label": "Primary" }]
+    },
+    {
+      "id": "zee-bangla",
+      "name": "Zee Bangla",
+      "category": "india",
+      "logo": "https://raw.githubusercontent.com/subirkumarpaul/Logo/main/zee%20Bangla.png",
+      "description": "জি বাংলা",
+      "streams": [{ "type": "hls", "url": "http://103.161.153.165:8000/play/zeebnhd/index.m3u8", "quality": "HD", "label": "Primary" }]
+    },
+    {
+      "id": "colors-bangla",
+      "name": "Colors Bangla",
+      "category": "india",
+      "logo": "https://raw.githubusercontent.com/subirkumarpaul/Logo/main/Colors%20Bangla.png",
+      "description": "কালার্স বাংলা",
+      "streams": [{ "type": "hls", "url": "http://103.229.254.25:7001/play/a076/index.m3u8", "quality": "HD", "label": "Primary" }]
+    },
+    {
+      "id": "star-plus",
+      "name": "Star Plus",
+      "category": "india",
+      "logo": "https://raw.githubusercontent.com/subirkumarpaul/Logo/main/Star%20Plus.png",
+      "description": "স্টার প্লাস",
+      "streams": [{ "type": "hls", "url": "http://103.229.254.25:7001/play/a09z/index.m3u8", "quality": "HD", "label": "Primary" }]
+    },
+    {
+      "id": "sony-tv",
+      "name": "Sony TV",
+      "category": "india",
+      "logo": "https://raw.githubusercontent.com/subirkumarpaul/Logo/56e54462053b1b278b80b532c89c01f17e360fd5/Sony%20TV.png",
+      "description": "সনি টিভি",
+      "streams": [{ "type": "hls", "url": "http://198.195.239.50:8095/SonyTv/tracks-v1a1/mono.m3u8", "quality": "HD", "label": "Primary" }]
+    },
+    {
+      "id": "al-jazeera",
+      "name": "Al Jazeera",
+      "category": "news",
+      "logo": "https://raw.githubusercontent.com/subirkumarpaul/Logo/main/Al%20Jazeera%20.png",
+      "description": "আন্তর্জাতিক সংবাদ",
+      "streams": [
+        { "type": "hls", "url": "https://live-hls-web-aje.getaj.net/AJE/index.m3u8", "quality": "1080p", "label": "Primary" },
+        { "type": "hls", "url": "https://d1cy85syyhvqz5.cloudfront.net/v1/master/7b67fbda7ab859400a821e9aa0deda20ab7ca3d2/aljazeeraLive/AJE/index.m3u8", "quality": "HD", "label": "Backup" }
+      ]
+    },
+    {
+      "id": "dw-english",
+      "name": "DW English",
+      "category": "news",
+      "logo": "https://i.imgur.com/A1xzjOI.png",
+      "description": "Deutsche Welle",
+      "streams": [{ "type": "hls", "url": "https://dwamdstream102.akamaized.net/hls/live/2015525/dwstream102/index.m3u8", "quality": "720p", "label": "Primary" }]
+    },
+    {
+      "id": "ndtv",
+      "name": "NDTV English",
+      "category": "news",
+      "logo": "https://i.imgur.com/ldXaLJK.png",
+      "description": "NDTV News",
+      "streams": [{ "type": "hls", "url": "https://ndtv24x7elemarchana.akamaized.net/hls/live/2003678/ndtv24x7/master.m3u8", "quality": "HD", "label": "Primary" }]
+    },
+    {
+      "id": "nasa-tv",
+      "name": "NASA TV",
+      "category": "international",
+      "logo": "https://www.nasa.gov/wp-content/uploads/2023/03/nasa-logo-web-rgb.png",
+      "description": "NASA Live",
+      "streams": [{ "type": "hls", "url": "https://ntv1.akamaized.net/hls/live/2014075/NASA-NTV1-HLS/master.m3u8", "quality": "1080p", "label": "Primary" }]
+    },
+    {
+      "id": "peace-tv-bangla",
+      "name": "Peace TV Bangla",
+      "category": "religious",
+      "logo": "https://i.ibb.co/Gfw89mC/20240804-033102.png",
+      "description": "পিস টিভি বাংলা",
+      "streams": [{ "type": "hls", "url": "https://dzkyvlfyge.erbvr.com/PeaceTvBangla/tracks-v2a1/mono.m3u8", "quality": "720p", "label": "Primary" }]
+    },
+    {
+      "id": "tom-jerry",
+      "name": "Tom & Jerry TV",
+      "category": "kids",
+      "logo": "https://i.postimg.cc/FFwSjdzS/Pogo.jpg",
+      "description": "টম অ্যান্ড জেরি",
+      "streams": [{ "type": "hls", "url": "https://live20.bozztv.com/giatvplayout7/giatv-208314/playlist.m3u8", "quality": "HD", "label": "Primary" }]
+    },
+    {
+      "id": "star-movies",
+      "name": "Star Movies",
+      "category": "movies",
+      "logo": "https://raw.githubusercontent.com/subirkumarpaul/Logo/main/Star%20Movies.png",
+      "description": "স্টার মুভিজ",
+      "streams": [{ "type": "hls", "url": "http://198.195.239.50:8095/StarMovies/tracks-v1a1/mono.m3u8", "quality": "HD", "label": "Primary" }]
+    }
+  ]
+}

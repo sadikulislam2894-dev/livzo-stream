@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO -->
+  <title>Livzo Stream — বাংলাদেশের সেরা লাইভ টিভি ও স্পোর্টস স্ট্রিমিং</title>
+  <meta name="description" content="বাংলাদেশ, ভারত ও আন্তর্জাতিক লাইভ টিভি চ্যানেল এবং ক্রিকেট, ফুটবল সরাসরি দেখুন।">
+  <meta name="keywords" content="live tv bangladesh, cricket live, football live, bd tv online, somoy tv live">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Livzo Stream — লাইভ টিভি">
+  <meta property="og:description" content="সেরা কোয়ালিটিতে লাইভ টিভি দেখুন">
+  <meta property="og:image" content="/public/og-image.jpg">
+  <meta property="og:type" content="website">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/public/favicon.ico">
+
+  <!-- Preconnect CDN -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="./src/css/style.css">
+  <link rel="stylesheet" href="./src/css/player.css">
+
+  <!-- HLS.js -->
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest/dist/hls.min.js"></script>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ===== HEADER ===== -->
+  <header class="header">
+    <a href="/" class="logo">
+      <div class="logo-mark">📺</div>
+      <span class="logo-name">Livzo<span>Stream</span></span>
+    </a>
+
+    <div class="live-pill">
+      <div class="live-dot"></div>
+      LIVE
+    </div>
+
+    <!-- Ticker -->
+    <div class="header-ticker">
+      <div class="ticker-track" id="tickerTrack">
+        <!-- JS দিয়ে populate হবে -->
+        <span class="ticker-item">🏏 লাইভ স্কোর লোড হচ্ছে...</span>
+        <span class="ticker-item">🏏 লাইভ স্কোর লোড হচ্ছে...</span>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <!-- Search toggle (mobile) -->
+      <button class="btn-icon" title="সার্চ">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </button>
+
+      <!-- Admin link (hidden until admin login) -->
+      <a href="./admin.html" class="btn-icon hidden" id="adminLink" title="অ্যাডমিন">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 4.5a7.5 7.5 0 1 0 7.5 7.5"/><path d="M16 2l4 4-4 4"/></svg>
+      </a>
+
+      <!-- Login -->
+      <button class="btn-login" id="btnLogin" onclick="window.authMgr?.showLoginModal()">লগইন</button>
+    </div>
+  </header>
+
+  <!-- ===== SIDEBAR ===== -->
+  <aside class="sidebar">
+    <div class="sidebar-top">
+      <!-- Search -->
+      <div class="search-wrap">
+        <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input class="search-input" id="searchInput" type="text" placeholder="চ্যানেল খুঁজুন...">
+      </div>
+
+      <!-- Category Tabs -->
+      <div class="cat-tabs" id="catTabs">
+        <!-- JS দিয়ে populate হবে -->
+      </div>
+    </div>
+
+    <!-- Channel List -->
+    <div class="channel-scroll" id="channelList">
+      <div style="padding:20px;text-align:center;color:var(--text3);font-size:13px;">লোড হচ্ছে...</div>
+    </div>
+  </aside>
+
+  <!-- ===== MAIN PLAYER AREA ===== -->
+  <main class="main-area">
+
+    <!-- Video Container -->
+    <div class="video-wrap" id="videoWrap">
+
+      <!-- Native Video -->
+      <video id="mainPlayer" playsinline preload="none"></video>
+
+      <!-- YouTube iframe -->
+      <iframe id="ytPlayer"
+        class="hidden"
+        style="position:absolute;inset:0;width:100%;height:100%;border:none;"
+        allow="autoplay; encrypted-media; picture-in-picture"
+        allowfullscreen>
+      </iframe>
+
+      <!-- Top Bar (channel name overlay) -->
+      <div class="player-top-bar">
+        <div class="top-bar-logo" id="topBarLogo"></div>
+        <div class="top-bar-name" id="topBarName">Livzo Stream</div>
+        <div class="top-bar-live">LIVE</div>
+      </div>
+
+      <!-- Idle Screen -->
+      <div class="idle-screen" id="idleScreen">
+        <div class="idle-logo">LIVE<span style="color:var(--accent)">BD</span></div>
+        <div class="idle-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        </div>
+        <div class="idle-text">বামের সাইডবার থেকে<br>একটি চ্যানেল বেছে নিন</div>
+      </div>
+
+      <!-- Loading Overlay -->
+      <div class="player-loading" id="playerLoading">
+        <div class="spinner-ring"></div>
+        <div class="loading-ch-name" id="loadingChName">লোড হচ্ছে...</div>
+      </div>
+
+      <!-- Error Overlay -->
+      <div class="player-error" id="playerError">
+        <div class="error-icon">⚠</div>
+        <div class="error-title">স্ট্রিম পাওয়া যাচ্ছে না</div>
+        <div class="error-msg" id="errorMsgText">চ্যানেলটি এই মুহূর্তে অফলাইন থাকতে পারে।</div>
+        <button class="btn-retry" id="btnRetry">আবার চেষ্টা করুন</button>
+      </div>
+
+      <!-- Player Controls -->
+      <div class="player-controls" id="playerControls">
+        <div class="controls-row">
+          <!-- Play/Pause -->
+          <button class="ctrl-btn" id="btnPlayPause" title="Play/Pause" data-playing="false">
+            <svg id="iconPlay" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            <svg id="iconPause" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="display:none"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+          </button>
+
+          <!-- Mute -->
+          <button class="ctrl-btn" id="btnMute" title="Mute/Unmute">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+          </button>
+
+          <!-- Volume -->
+          <div class="volume-wrap">
+            <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="100">
+          </div>
+
+          <div class="ctrl-spacer"></div>
+
+          <!-- Source switcher -->
+          <div class="source-row" id="sourceRow"></div>
+
+          <!-- Guide -->
+          <button class="action-btn" id="btnGuide" title="প্রোগ্রাম গাইড">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <span style="font-size:12px">গাইড</span>
+          </button>
+
+          <!-- Fullscreen -->
+          <button class="ctrl-btn" id="btnFullscreen" title="Fullscreen">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Player Info Bar -->
+    <div class="player-info-bar">
+      <span class="now-badge">▶ এখন চলছে</span>
+      <div class="now-info">
+        <div class="now-ch-name" id="nowChName">কোনো চ্যানেল সিলেক্ট করা হয়নি</div>
+        <div class="now-ch-meta" id="nowChMeta">বামের সাইডবার থেকে চ্যানেল বেছে নিন</div>
+      </div>
+      <div class="player-action-btns">
+        <button class="action-btn" onclick="window.streamPlayer?.toggleFullscreen()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+          <span>ফুলস্ক্রিন</span>
+        </button>
+        <button class="action-btn" onclick="window.streamPlayer?._tryNextSource ? window.streamPlayer.currentStreamIndex = 0 : null; window.streamPlayer?.loadChannel(window.streamPlayer?.currentChannel)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M23 4v6h-6"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          <span>রিলোড</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- EPG Panel -->
+    <div class="epg-panel" id="epgPanel">
+      <div class="epg-header">
+        <div class="epg-title">📅 প্রোগ্রাম গাইড</div>
+        <button class="btn-icon" onclick="document.getElementById('epgPanel').classList.remove('open')">✕</button>
+      </div>
+      <div class="epg-grid" id="epgGrid">
+        <div class="epg-slot current">
+          <div class="epg-time">এখন</div>
+          <div class="epg-show">সরাসরি সম্প্রচার</div>
+          <div class="epg-genre">Live</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Promo Bar -->
+    <div class="promo-bar">
+      <span>📡 ভালো ইন্টারনেট সংযোগে সেরা কোয়ালিটি পাবেন</span>
+      <span>নিজের সাইট বানাতে: <a href="https://wa.me/8801772548405" target="_blank">WhatsApp করুন</a></span>
+    </div>
+
+  </main>
+</div>
+
+<!-- ===== LOGIN MODAL ===== -->
+<div class="modal-backdrop hidden" id="loginModal">
+  <div class="modal">
+    <div class="modal-title">⚙️ Admin Login</div>
+    <div class="form-group">
+      <label class="form-label">Email</label>
+      <input class="form-input" id="loginUser" type="text" placeholder="email দিন">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Password</label>
+      <input class="form-input" id="loginPass" type="password" placeholder="password দিন">
+    </div>
+    <div id="loginError" style="color:var(--accent);font-size:13px;margin-top:6px;display:none;"></div>
+    <button class="btn-primary" id="loginSubmit">লগইন করুন</button>
+    <button style="width:100%;margin-top:10px;padding:10px;color:var(--text2);font-size:13px;" onclick="document.getElementById('loginModal').classList.add('hidden')">বাতিল</button>
+  </div>
+</div>
+
+<!-- ===== TOAST CONTAINER ===== -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- ===== JS ===== -->
+<script src="./src/js/player.js"></script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+  import { getFirestore, collection, getDocs, orderBy, query } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBWwtfwGgTAK2wyftSCJDQRsyao5fvg83U",
+    authDomain: "livzo-stream.firebaseapp.com",
+    projectId: "livzo-stream",
+    storageBucket: "livzo-stream.firebasestorage.app",
+    messagingSenderId: "268515086933",
+    appId: "1:268515086933:web:2ef7623bc790e6f8cbbadc"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  // Categories
+  const categories = [
+    { id: 'bangladesh', name: 'বাংলাদেশ', icon: '🇧🇩' },
+    { id: 'india', name: 'ভারত', icon: '🇮🇳' },
+    { id: 'sports', name: 'স্পোর্টস', icon: '⚽' },
+    { id: 'news', name: 'নিউজ', icon: '📰' },
+    { id: 'movies', name: 'মুভিজ', icon: '🎬' },
+    { id: 'kids', name: 'কিডস', icon: '🧒' },
+    { id: 'religious', name: 'ধর্মীয়', icon: '🕌' },
+    { id: 'international', name: 'আন্তর্জাতিক', icon: '🌍' }
+  ];
+
+  let allChannels = [];
+  let activeCategory = 'all';
+  let activeChannel = null;
+
+  // Toast
+  window.showToast = function(msg, type='info', duration=3000) {
+    const container = document.getElementById('toastContainer');
+    if (!container) return;
+    const icons = { success: '✓', error: '✕', info: 'ℹ' };
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.innerHTML = `<span>${icons[type]||'ℹ'}</span> <span>${msg}</span>`;
+    container.appendChild(toast);
+    setTimeout(() => { toast.style.opacity='0'; toast.style.transition='0.3s'; setTimeout(()=>toast.remove(),300); }, duration);
+  };
+
+  // Load channels
+  async function loadChannels() {
+    try {
+      const q = query(collection(db, 'channels'), orderBy('name'));
+      const snapshot = await getDocs(q);
+      allChannels = snapshot.docs.map(d => ({ firestoreId: d.id, ...d.data() }));
+      renderTabs();
+      renderChannels();
+      setTimeout(() => {
+        if (allChannels[0]) selectChannel(allChannels[0]);
+      }, 800);
+    } catch(e) {
+      document.getElementById('channelList').innerHTML = `<div style="padding:20px;text-align:center;color:var(--text3)">লোড হয়নি</div>`;
+    }
+  }
+
+  function renderTabs() {
+    const tabsEl = document.getElementById('catTabs');
+    if (!tabsEl) return;
+    tabsEl.innerHTML = '';
+    [{ id:'all', name:'সব', icon:'📺' }, ...categories].forEach((cat, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'cat-tab' + (i===0 ? ' active' : '');
+      btn.innerHTML = `${cat.icon} ${cat.name}`;
+      btn.addEventListener('click', () => {
+        activeCategory = cat.id;
+        document.querySelectorAll('.cat-tab').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        renderChannels();
+      });
+      tabsEl.appendChild(btn);
+    });
+  }
+
+  function renderChannels() {
+    const listEl = document.getElementById('channelList');
+    if (!listEl) return;
+    const search = document.getElementById('searchInput')?.value.toLowerCase() || '';
+    const filtered = allChannels.filter(ch => {
+      const matchCat = activeCategory==='all' || ch.category===activeCategory;
+      const matchSearch = !search || ch.name?.toLowerCase().includes(search) || ch.description?.toLowerCase().includes(search);
+      return matchCat && matchSearch;
+    });
+
+    listEl.innerHTML = '';
+    if (!filtered.length) {
+      listEl.innerHTML = `<div style="padding:24px;text-align:center;color:var(--text3);font-size:13px;">কোনো চ্যানেল নেই</div>`;
+      return;
+    }
+
+    filtered.forEach(ch => {
+      const item = document.createElement('div');
+      item.className = 'ch-item' + (activeChannel?.firestoreId===ch.firestoreId ? ' active' : '');
+      item.dataset.chId = ch.id;
+      const logoHtml = ch.logo
+        ? `<img src="${ch.logo}" alt="${ch.name}" onerror="this.style.display='none';this.parentElement.textContent='${ch.name?.substring(0,3).toUpperCase()}';">`
+        : ch.name?.substring(0,3).toUpperCase();
+      item.innerHTML = `
+        <div class="ch-logo-wrap">${logoHtml}</div>
+        <div class="ch-info">
+          <div class="ch-name">${ch.name}</div>
+          <div class="ch-status"><div class="ch-status-dot"></div><span>সরাসরি</span></div>
+        </div>`;
+      item.addEventListener('click', () => selectChannel(ch));
+      listEl.appendChild(item);
+    });
+  }
+
+  function selectChannel(ch) {
+    activeChannel = ch;
+    document.querySelectorAll('.ch-item').forEach(el=>el.classList.remove('active'));
+    const el = document.querySelector(`.ch-item[data-ch-id="${ch.id}"]`);
+    if (el) { el.classList.add('active'); el.scrollIntoView({block:'nearest',behavior:'smooth'}); }
+    window.dispatchEvent(new CustomEvent('channelSelected', { detail: ch }));
+  }
+
+  // Search
+  document.getElementById('searchInput')?.addEventListener('input', renderChannels);
+
+  // Auth
+  onAuthStateChanged(auth, (user) => {
+    const loginBtn = document.getElementById('btnLogin');
+    const adminLink = document.getElementById('adminLink');
+    if (user) {
+      if (loginBtn) { loginBtn.textContent = '⚙️ Admin'; loginBtn.onclick = () => { if(confirm('লগআউট করবেন?')) signOut(auth); }; }
+      adminLink?.classList.remove('hidden');
+    } else {
+      if (loginBtn) { loginBtn.textContent = 'লগইন'; loginBtn.onclick = () => document.getElementById('loginModal')?.classList.remove('hidden'); }
+      adminLink?.classList.add('hidden');
+    }
+  });
+
+  // Login form
+  document.getElementById('loginSubmit')?.addEventListener('click', async () => {
+    const email = document.getElementById('loginUser').value.trim();
+    const pass = document.getElementById('loginPass').value;
+    const errEl = document.getElementById('loginError');
+    try {
+      await signInWithEmailAndPassword(auth, email, pass);
+      errEl.style.display = 'none';
+    } catch(e) {
+      errEl.textContent = 'ভুল email বা password!';
+      errEl.style.display = 'block';
+    }
+  });
+
+  document.getElementById('loginPass')?.addEventListener('keydown', e => {
+    if (e.key==='Enter') document.getElementById('loginSubmit')?.click();
+  });
+
+  // Ticker
+  const tickerData = [
+    '🏏 BAN vs IND — 3rd ODI: BAN 245/7 (47 ov)',
+    '⚽ Premier League: Arsenal 2-1 Chelsea (FT)',
+    '🏏 IPL: RCB vs MI — আজ রাত ৮টায়',
+    '⚽ Champions League: আজ রাত ১২:৩০',
+  ];
+  const track = document.getElementById('tickerTrack');
+  if (track) {
+    const items = [...tickerData, ...tickerData];
+    track.innerHTML = items.map(t=>`<span class="ticker-item">${t}</span>`).join('<span class="ticker-sep">•</span>');
+  }
+
+  // Init player
+  window.streamPlayer = new StreamPlayer();
+
+  // Load channels from Firestore
+  await loadChannels();
+</script>
+</body>
+</html>

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel — Livzo Stream</title>
+  <link rel="stylesheet" href="./src/css/style.css">
+  <style>
+    body { overflow: auto; height: auto; }
+    .app { display: block; height: auto; overflow: visible;}
+    .admin-wrap { max-width: 1100px; margin: 0 auto; padding: 20px; }
+    .admin-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+    .admin-title { font-size: 22px; font-weight: 700; }
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 24px; }
+    .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 16px 18px; }
+    .stat-label { font-size: 12px; color: var(--text2); margin-bottom: 6px; }
+    .stat-val { font-size: 26px; font-weight: 700; }
+    .stat-val.accent { color: var(--accent); }
+    .stat-val.green { color: var(--live); }
+    .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+    .section-title { font-size: 16px; font-weight: 600; }
+    .table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 24px; }
+    table { width: 100%; border-collapse: collapse; }
+    th { background: var(--surface2); padding: 10px 14px; text-align: left; font-size: 12px; font-weight: 600; color: var(--text2); text-transform: uppercase; }
+    td { padding: 10px 14px; font-size: 13px; border-top: 1px solid var(--border); vertical-align: middle; }
+    tr:hover td { background: var(--surface2); }
+    .ch-logo-sm { width: 36px; height: 26px; background: var(--surface3); border-radius: 4px; overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 9px; color: var(--text3); }
+    .ch-logo-sm img { width: 100%; height: 100%; object-fit: contain; padding: 2px; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+    .badge-blue { background: rgba(59,130,246,0.12); color: var(--info); }
+    .tbl-actions { display: flex; gap: 6px; }
+    .tbl-btn { padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 500; border: 1px solid var(--border); background: var(--surface2); color: var(--text2); cursor: pointer; transition: all var(--transition); }
+    .tbl-btn:hover { background: var(--surface3); color: var(--text); }
+    .tbl-btn.danger:hover { background: rgba(230,57,70,0.12); border-color: rgba(230,57,70,0.3); color: var(--accent); }
+    .form-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px; margin-bottom: 24px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .access-guard { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; gap: 16px; text-align: center; }
+    .login-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 32px; width: 100%; max-width: 380px; }
+  </style>
+</head>
+<body>
+<div class="app">
+
+  <!-- Login Screen -->
+  <div class="access-guard" id="loginScreen">
+    <div class="login-box">
+      <div style="font-size:40px;margin-bottom:12px;">🔐</div>
+      <div style="font-size:20px;font-weight:700;margin-bottom:4px;">Admin Login</div>
+      <div style="font-size:13px;color:var(--text2);margin-bottom:24px;">Livzo Stream</div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input class="form-input" id="adminEmail" type="email" placeholder="admin@email.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input class="form-input" id="adminPass" type="password" placeholder="password দিন">
+      </div>
+      <div id="loginErr" style="color:var(--accent);font-size:13px;margin:8px 0;display:none;"></div>
+      <button class="btn-primary" id="btnAdminLogin">লগইন করুন</button>
+      <a href="index.html" style="display:block;text-align:center;margin-top:12px;font-size:13px;color:var(--text2);">← সাইটে ফিরুন</a>
+    </div>
+  </div>
+
+  <!-- Admin Content -->
+  <div class="admin-wrap" id="adminContent" style="display:none">
+    <div class="admin-header">
+      <div>
+        <div class="admin-title">⚙️ Admin Panel</div>
+        <div style="font-size:13px;color:var(--text2);margin-top:2px;">Livzo Stream — Channel Management</div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;">
+        <span id="adminEmail_display" style="font-size:13px;color:var(--text2);"></span>
+        <a href="index.html" class="tbl-btn">← সাইটে ফিরুন</a>
+        <button class="tbl-btn danger" id="btnLogout">লগআউট</button>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">মোট চ্যানেল</div>
+        <div class="stat-val accent" id="totalChannels">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">বাংলাদেশ</div>
+        <div class="stat-val" id="bdCount">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">স্পোর্টস</div>
+        <div class="stat-val green" id="sportsCount">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">আন্তর্জাতিক</div>
+        <div class="stat-val" id="intlCount">0</div>
+      </div>
+    </div>
+
+    <!-- Add Channel Form -->
+    <div class="section-header">
+      <div class="section-title">➕ নতুন চ্যানেল যোগ করুন</div>
+    </div>
+    <div class="form-card">
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">চ্যানেলের নাম *</label>
+          <input class="form-input" id="newChName" placeholder="যেমন: Somoy TV">
+        </div>
+        <div class="form-group">
+          <label class="form-label">ক্যাটাগরি *</label>
+          <select class="form-input" id="newChCat">
+            <option value="bangladesh">🇧🇩 বাংলাদেশ</option>
+            <option value="india">🇮🇳 ভারত</option>
+            <option value="sports">⚽ স্পোর্টস</option>
+            <option value="news">📰 নিউজ</option>
+            <option value="movies">🎬 মুভিজ</option>
+            <option value="kids">🧒 কিডস</option>
+            <option value="religious">🕌 ধর্মীয়</option>
+            <option value="international">🌍 আন্তর্জাতিক</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Logo URL (ঐচ্ছিক)</label>
+          <input class="form-input" id="newChLogo" placeholder="https://example.com/logo.png">
+        </div>
+        <div class="form-group">
+          <label class="form-label">বিবরণ</label>
+          <input class="form-input" id="newChDesc" placeholder="সংক্ষিপ্ত বিবরণ">
+        </div>
+        <div class="form-group" style="grid-column: 1 / -1;">
+          <label class="form-label">Stream URL (HLS .m3u8) *</label>
+          <input class="form-input" id="newChStream" placeholder="https://example.com/live.m3u8">
+        </div>
+        <div class="form-group">
+          <label class="form-label">YouTube Backup (ঐচ্ছিক)</label>
+          <input class="form-input" id="newChYt" placeholder="https://youtube.com/embed/VIDEO_ID">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Backup Stream 2 (ঐচ্ছিক)</label>
+          <input class="form-input" id="newChBackup" placeholder="https://example.com/backup.m3u8">
+        </div>
+      </div>
+      <button class="btn-primary" style="width:auto;padding:10px 24px;margin-top:8px;" id="btnAddChannel">
+        ➕ চ্যানেল যোগ করুন
+      </button>
+    </div>
+
+    <!-- Channel Table -->
+    <div class="section-header">
+      <div class="section-title">📋 চ্যানেল তালিকা</div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Logo</th>
+            <th>নাম</th>
+            <th>ক্যাটাগরি</th>
+            <th>Stream URL</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="channelTableBody">
+          <tr><td colspan="5" style="text-align:center;color:var(--text3)">লোড হচ্ছে...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+  import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, orderBy, query } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBWwtfwGgTAK2wyftSCJDQRsyao5fvg83U",
+    authDomain: "livzo-stream.firebaseapp.com",
+    projectId: "livzo-stream",
+    storageBucket: "livzo-stream.firebasestorage.app",
+    messagingSenderId: "268515086933",
+    appId: "1:268515086933:web:2ef7623bc790e6f8cbbadc"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  // Toast
+  function showToast(msg, type = 'info') {
+    const container = document.getElementById('toastContainer');
+    const icons = { success: '✓', error: '✕', info: 'ℹ' };
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.innerHTML = `<span>${icons[type]}</span> <span>${msg}</span>`;
+    container.appendChild(toast);
+    setTimeout(() => { toast.style.opacity='0'; toast.style.transition='0.3s'; setTimeout(()=>toast.remove(),300); }, 3000);
+  }
+
+  let allChannels = [];
+
+  // Auth state
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('adminContent').style.display = 'block';
+      document.getElementById('adminEmail_display').textContent = user.email;
+      await loadChannels();
+    } else {
+      document.getElementById('loginScreen').style.display = 'flex';
+      document.getElementById('adminContent').style.display = 'none';
+    }
+  });
+
+  // Login
+  document.getElementById('btnAdminLogin').addEventListener('click', async () => {
+    const email = document.getElementById('adminEmail').value.trim();
+    const pass = document.getElementById('adminPass').value;
+    const errEl = document.getElementById('loginErr');
+    try {
+      await signInWithEmailAndPassword(auth, email, pass);
+      errEl.style.display = 'none';
+    } catch (e) {
+      errEl.textContent = 'ভুল email বা password!';
+      errEl.style.display = 'block';
+    }
+  });
+
+  // Enter key login
+  document.getElementById('adminPass').addEventListener('keydown', e => {
+    if (e.key === 'Enter') document.getElementById('btnAdminLogin').click();
+  });
+
+  // Logout
+  document.getElementById('btnLogout').addEventListener('click', async () => {
+    if (confirm('লগআউট করবেন?')) await signOut(auth);
+  });
+
+  // Load channels from Firestore
+  async function loadChannels() {
+    try {
+      const q = query(collection(db, 'channels'), orderBy('name'));
+      const snapshot = await getDocs(q);
+      allChannels = snapshot.docs.map(d => ({ firestoreId: d.id, ...d.data() }));
+      renderStats();
+      renderTable();
+    } catch (e) {
+      showToast('চ্যানেল লোড করা যায়নি', 'error');
+    }
+  }
+
+  function renderStats() {
+    document.getElementById('totalChannels').textContent = allChannels.length;
+    document.getElementById('bdCount').textContent = allChannels.filter(c => c.category === 'bangladesh').length;
+    document.getElementById('sportsCount').textContent = allChannels.filter(c => c.category === 'sports').length;
+    document.getElementById('intlCount').textContent = allChannels.filter(c => c.category === 'international').length;
+  }
+
+  function renderTable() {
+    const tbody = document.getElementById('channelTableBody');
+    if (!allChannels.length) {
+      tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--text3);padding:20px;">কোনো চ্যানেল নেই। উপরে যোগ করুন।</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = allChannels.map((ch) => `
+      <tr>
+        <td><div class="ch-logo-sm">${ch.logo ? `<img src="${ch.logo}" onerror="this.parentElement.textContent='${ch.name?.substring(0,3)}'">` : ch.name?.substring(0,3)}</div></td>
+        <td><div style="font-weight:500">${ch.name}</div><div style="font-size:11px;color:var(--text3)">${ch.description||''}</div></td>
+        <td><span class="badge badge-blue">${ch.category}</span></td>
+        <td style="font-size:11px;color:var(--text3);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${ch.streams?.[0]?.url||'—'}</td>
+        <td>
+          <div class="tbl-actions">
+            <button class="tbl-btn danger" onclick="deleteChannel('${ch.firestoreId}', '${ch.name}')">মুছুন</button>
+          </div>
+        </td>
+      </tr>`).join('');
+  }
+
+  // Add channel
+  document.getElementById('btnAddChannel').addEventListener('click', async () => {
+    const name = document.getElementById('newChName').value.trim();
+    const cat = document.getElementById('newChCat').value;
+    const logo = document.getElementById('newChLogo').value.trim();
+    const desc = document.getElementById('newChDesc').value.trim();
+    const stream = document.getElementById('newChStream').value.trim();
+    const yt = document.getElementById('newChYt').value.trim();
+    const backup = document.getElementById('newChBackup').value.trim();
+
+    if (!name || !stream) {
+      showToast('নাম এবং Stream URL আবশ্যক!', 'error');
+      return;
+    }
+
+    const streams = [
+      { type: 'hls', url: stream, quality: '720p', label: 'Primary' }
+    ];
+    if (backup) streams.push({ type: 'hls', url: backup, quality: '720p', label: 'Backup' });
+    if (yt) streams.push({ type: 'youtube', url: yt, label: 'YouTube' });
+
+    const newCh = {
+      id: name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''),
+      name,
+      category: cat,
+      logo: logo || null,
+      description: desc || null,
+      streams,
+      createdAt: new Date().toISOString()
+    };
+
+    try {
+      document.getElementById('btnAddChannel').textContent = 'যোগ করা হচ্ছে...';
+      await addDoc(collection(db, 'channels'), newCh);
+      showToast(`"${name}" সফলভাবে যোগ হয়েছে! ✓`, 'success');
+      ['newChName','newChLogo','newChDesc','newChStream','newChYt','newChBackup'].forEach(id => {
+        document.getElementById(id).value = '';
+      });
+      await loadChannels();
+    } catch (e) {
+      showToast('যোগ করা যায়নি: ' + e.message, 'error');
+    } finally {
+      document.getElementById('btnAddChannel').textContent = '➕ চ্যানেল যোগ করুন';
+    }
+  });
+
+  // Delete channel
+  window.deleteChannel = async (firestoreId, name) => {
+    if (!confirm(`"${name}" মুছে ফেলবেন?`)) return;
+    try {
+      await deleteDoc(doc(db, 'channels', firestoreId));
+      showToast(`"${name}" মুছে ফেলা হয়েছে`, 'success');
+      await loadChannels();
+    } catch (e) {
+      showToast('মুছতে পারা যায়নি', 'error');
+    }
+  };
+</script>
+</body>
+</html>
